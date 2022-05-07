@@ -1,0 +1,67 @@
+{
+  "name": "ohmygraphql",
+  "version": "0.0.0",
+  "packageManager": "pnpm@7.0.0",
+  "description": "",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "rimraf dist && unbuild",
+    "prettier": "prettier --write .",
+    "prepublishOnly": "pnpm build",
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "postinstall": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoTwT/ohmygraphql.git"
+  },
+  "keywords": [],
+  "author": "LoTwT <709937065@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LoTwT/ohmygraphql/issues"
+  },
+  "homepage": "https://github.com/LoTwT/ohmygraphql#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.31",
+    "bumpp": "^7.1.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.1",
+    "pnpm": "^7.0.0",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.4",
+    "unbuild": "^0.7.4",
+    "unplugin-auto-import": "^0.7.1",
+    "vitest": "^0.10.5"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,md}": [
+      "prettier --write"
+    ]
+  }
+}
