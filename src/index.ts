@@ -12,3 +12,13 @@ export type GraphqlResponse<Resource extends string, Fields extends string> = {
     [P in Resource]: Record<Fields, any>
   }
 }
+
+export const useGraphqlMutation = (
+  mutation: string,
+  resource: string,
+  data: Record<string, any>,
+) => ({
+  body: {
+    query: `{${mutation}(${resource}:${data}){${Object.keys(data).join(" ")}}}`,
+  },
+})
