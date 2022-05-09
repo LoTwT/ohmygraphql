@@ -1,7 +1,7 @@
 {
   "name": "ohmygraphql",
   "version": "0.0.0",
-  "packageManager": "pnpm@7.0.0",
+  "packageManager": "pnpm@7.0.1",
   "description": "",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -51,7 +51,7 @@
     "bumpp": "^7.1.1",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
-    "pnpm": "^7.0.0",
+    "pnpm": "^7.0.1",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.4",
@@ -63,5 +63,8 @@
     "*.{js,ts,json,md}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "ohmyfetch": "^0.4.16"
   }
 }
