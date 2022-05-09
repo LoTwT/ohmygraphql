@@ -1,59 +1,77 @@
 import { capitalize } from "./helper"
+import {
+  GraphqlQueryResult,
+  ActionType,
+  QueryType,
+  QueryOptions,
+  CreateAction,
+  CreateActionResult,
+} from "./types"
 
 export const useGraphqlQuery = (
   resource: string,
   fields: string[],
   args?: Record<string, unknown>,
-) => {
-  // fields
-  const fieldsString = `${fields.join(" ")}`
+): GraphqlQueryResult => {
+  return {
+    create: createQuery("mutation", "create", { resource, fields, args }),
+    find: createQuery("query", "find", { resource, fields, args }),
+    findAll: createQuery("query", "findAll", { resource, fields, args }),
+    update: createQuery("mutation", "update", { resource, fields, args }),
+    remove: createQuery("mutation", "remove", { resource, fields, args }),
+  }
+}
 
+export const createQuery = (
+  type: QueryType,
+  action: ActionType | CreateAction,
+  queryOptions: QueryOptions,
+) => {
+  const queryTypeString = type === "query" ? "" : "mutation"
+
+  const { resource, fields, args } = queryOptions
+
+  const { base: actionString, input: actionInput } =
+    typeof action === "function"
+      ? action()
+      : createDefaultAction(action, resource)
+
+  const hasArgs = !!(args && Object.keys(args).length)
+
+  const argsString = hasArgs ? createArgsString(args, actionInput) : ""
+
+  const fieldsString = createFieldsString(fields)
+
+  return `${queryTypeString}{${actionString}${argsString}{${fieldsString}}}`
+}
+
+export const createDefaultAction = (
+  action: string,
+  resource: string,
+): CreateActionResult => {
+  const isFindAll = action === "findAll"
+  const actionString = `${isFindAll ? "find" : action}${capitalize(resource)}${
+    isFindAll ? "s" : ""
+  }`
+  return {
+    base: actionString,
+    input: `${actionString}Input`,
+  }
+}
+
+export const createFieldsString = (fields: string[]) => fields.join(" ")
+
+export const createArgsString = (
+  args: Record<string, unknown>,
+  actionInput: string,
+) => {
   let argsString = ""
-  if (args && Object.keys(args)) {
-    for (const key in args) {
-      argsString += `,${key}:${args[key]}`
-      argsString = argsString.substring(1)
-    }
+
+  for (const key in args) {
+    argsString += `,${key}:${args[key]}`
   }
 
-  return {
-    create: presetQuery.create(resource, fieldsString, argsString),
-    find: presetQuery.find(resource, fieldsString, argsString),
-    findAll: presetQuery.findAll(resource, fieldsString, argsString),
-    update: presetQuery.update(resource, fieldsString, argsString),
-    remove: presetQuery.remove(resource, fieldsString, argsString),
-  } as GraphqlQueryResult
-}
+  argsString = argsString.substring(1)
 
-const presetQuery: Record<ActionType, any> = {
-  create: (resource: string, fieldsString: string, argsString: string) => {
-    const actionFnName = `create${capitalize(resource)}`
-    return `mutation{${actionFnName}(${actionFnName}Input:{${argsString}}){${fieldsString}}}`
-  },
-  find: (resource: string, fieldsString: string, argsString: string) => {
-    const actionFnName = `find${capitalize(resource)}`
-    return `{${actionFnName}(${actionFnName}Input:{${argsString}}){${fieldsString}}}`
-  },
-  findAll: (resource: string, fieldsString: string, argsString: string) => {
-    const actionFnName = `find${capitalize(resource)}s`
-    return `{${actionFnName}(${actionFnName}Input:{${argsString}}){${fieldsString}}}`
-  },
-  update: (resource: string, fieldsString: string, argsString: string) => {
-    const actionFnName = `update${capitalize(resource)}`
-    return `mutation{${actionFnName}(${actionFnName}Input:{${argsString}}){${fieldsString}}}`
-  },
-  remove: (resource: string, fieldsString: string, argsString: string) => {
-    const actionFnName = `remove${capitalize(resource)}`
-    return `mutation{${actionFnName}(${actionFnName}Input:{${argsString}}){${fieldsString}}}`
-  },
-}
-
-type ActionType = "create" | "find" | "update" | "remove" | "findAll"
-
-type GraphqlQueryResult = {
-  create: string
-  find: string
-  findAll: string
-  update: string
-  remove: string
+  return `(${actionInput}:{${argsString}})`
 }
