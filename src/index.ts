@@ -67,8 +67,10 @@ export const createArgsString = (
 ) => {
   let argsString = ""
 
+  // todo elegantly stringify obj
   for (const key in args) {
-    argsString += `,${key}:${args[key]}`
+    const value = args[key]
+    argsString += `,${key}:${typeof value === "number" ? value : `"${value}"`}`
   }
 
   argsString = argsString.substring(1)

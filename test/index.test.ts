@@ -3,34 +3,9 @@ import {
   createDefaultAction,
   createFieldsString,
   createQuery,
-  useGraphqlQuery,
 } from "../src"
 
 describe("useGraphqlQuery", () => {
-  it("happy path", () => {
-    const { create, find, findAll, update, remove } = useGraphqlQuery(
-      "user",
-      ["id", "age"],
-      { id: 2 },
-    )
-
-    expect(create).toMatchInlineSnapshot(
-      '"mutation{createUser(createUserInput:{id:2}){id age}}"',
-    )
-    expect(find).toMatchInlineSnapshot(
-      '"{findUser(findUserInput:{id:2}){id age}}"',
-    )
-    expect(findAll).toMatchInlineSnapshot(
-      '"{findUsers(findUsersInput:{id:2}){id age}}"',
-    )
-    expect(update).toMatchInlineSnapshot(
-      '"mutation{updateUser(updateUserInput:{id:2}){id age}}"',
-    )
-    expect(remove).toMatchInlineSnapshot(
-      '"mutation{removeUser(removeUserInput:{id:2}){id age}}"',
-    )
-  })
-
   it("createDefaultAction", () => {
     const a1 = createDefaultAction("create", "user")
     const a2 = createDefaultAction("find", "user")
@@ -77,16 +52,18 @@ describe("useGraphqlQuery", () => {
 
   it("createArgsString", () => {
     const s = createArgsString({ a: "A", b: "B" }, "createTestInput")
-    expect(s).toMatchInlineSnapshot('"(createTestInput:{a:A,b:B})"')
+    expect(s).toMatchInlineSnapshot('"(createTestInput:{a:\\"A\\",b:\\"B\\"})"')
   })
 
   it("createQuery create", () => {
     const query = createQuery("mutation", "create", {
       resource: "user",
       fields: ["id", "age"],
-      args: { id: 2 },
+      args: { name: "username", age: 18, gender: "male" },
     })
-    expect(query).toBe("mutation{createUser(createUserInput:{id:2}){id age}}")
+    expect(query).toMatchInlineSnapshot(
+      '"mutation{createUser(createUserInput:{name:\\"username\\",age:18,gender:\\"male\\"}){id age}}"',
+    )
   })
 
   it("createQuery find", () => {
@@ -95,25 +72,29 @@ describe("useGraphqlQuery", () => {
       fields: ["id", "age"],
       args: { id: 2 },
     })
-    expect(query).toBe("{findUser(findUserInput:{id:2}){id age}}")
+    expect(query).toMatchInlineSnapshot(
+      '"{findUser(findUserInput:{id:2}){id age}}"',
+    )
   })
 
   it("createQuery findAll", () => {
     const query = createQuery("query", "findAll", {
       resource: "user",
       fields: ["id", "age"],
-      args: { id: 2 },
+      args: {},
     })
-    expect(query).toBe("{findUsers(findUsersInput:{id:2}){id age}}")
+    expect(query).toMatchInlineSnapshot('"{findUsers{id age}}"')
   })
 
   it("createQuery update", () => {
     const query = createQuery("mutation", "update", {
       resource: "user",
       fields: ["id", "age"],
-      args: { id: 2 },
+      args: { id: 2, name: "modified-username" },
     })
-    expect(query).toBe("mutation{updateUser(updateUserInput:{id:2}){id age}}")
+    expect(query).toMatchInlineSnapshot(
+      '"mutation{updateUser(updateUserInput:{id:2,name:\\"modified-username\\"}){id age}}"',
+    )
   })
 
   it("createQuery remove", () => {
@@ -122,6 +103,8 @@ describe("useGraphqlQuery", () => {
       fields: ["id", "age"],
       args: { id: 2 },
     })
-    expect(query).toBe("mutation{removeUser(removeUserInput:{id:2}){id age}}")
+    expect(query).toMatchInlineSnapshot(
+      '"mutation{removeUser(removeUserInput:{id:2}){id age}}"',
+    )
   })
 })
