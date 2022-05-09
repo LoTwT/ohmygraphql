@@ -1,12 +1,6 @@
-export type GraphqlQueryResult = {
-  create: string
-  find: string
-  findAll: string
-  update: string
-  remove: string
-}
+export type GraphqlQueryResult = Record<ActionType, string>
 
-export type ActionType = "create" | "find" | "update" | "remove" | "findAll"
+export type ActionType = "create" | "find" | "update" | "remove" | "findSome"
 
 export type QueryType = "query" | "mutation"
 

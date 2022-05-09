@@ -9,7 +9,7 @@ describe("useGraphqlQuery", () => {
   it("createDefaultAction", () => {
     const a1 = createDefaultAction("create", "user")
     const a2 = createDefaultAction("find", "user")
-    const a3 = createDefaultAction("findAll", "user")
+    const a3 = createDefaultAction("findSome", "user")
     const a4 = createDefaultAction("update", "user")
     const a5 = createDefaultAction("remove", "user")
 
@@ -78,7 +78,7 @@ describe("useGraphqlQuery", () => {
   })
 
   it("createQuery findAll", () => {
-    const query = createQuery("query", "findAll", {
+    const query = createQuery("query", "findSome", {
       resource: "user",
       fields: ["id", "age"],
       args: {},

@@ -16,7 +16,7 @@ export const useGraphqlQuery = (
   return {
     create: createQuery("mutation", "create", { resource, fields, args }),
     find: createQuery("query", "find", { resource, fields, args }),
-    findAll: createQuery("query", "findAll", { resource, fields, args }),
+    findSome: createQuery("query", "findSome", { resource, fields, args }),
     update: createQuery("mutation", "update", { resource, fields, args }),
     remove: createQuery("mutation", "remove", { resource, fields, args }),
   }
@@ -46,12 +46,12 @@ export const createQuery = (
 }
 
 export const createDefaultAction = (
-  action: string,
+  action: ActionType,
   resource: string,
 ): CreateActionResult => {
-  const isFindAll = action === "findAll"
-  const actionString = `${isFindAll ? "find" : action}${capitalize(resource)}${
-    isFindAll ? "s" : ""
+  const isFindSome = action === "findSome"
+  const actionString = `${isFindSome ? "find" : action}${capitalize(resource)}${
+    isFindSome ? "s" : ""
   }`
   return {
     base: actionString,
