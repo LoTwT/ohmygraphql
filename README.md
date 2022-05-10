@@ -1,5 +1,7 @@
 # ohmygraphql
 
+> still under develop... docs may not be the latest...
+
 a customize graphql hook for client in Javascript.
 
 ## features
