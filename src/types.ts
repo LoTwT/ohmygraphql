@@ -25,4 +25,4 @@ export type GraphqlQuery<T extends Record<string, unknown>> = {
 export type GraphqlMutation<T extends Record<string, unknown>> = {
   type: "mutation"
   action: MutationType | CreateAction
-} & QueryOptions<T>
+} & Required<QueryOptions<T>>
