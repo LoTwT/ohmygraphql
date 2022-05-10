@@ -10,7 +10,11 @@ a customize graphql hook for client in Javascript.
 ## how to use
 
 ```ts
-import { useGraphqlQuery, createQuery } from "ohmygraphql"
+declare const useGraphqlQuery: <DataType extends Record<string, unknown>>(
+  type: QueryType,
+  action: ActionType | CreateAction,
+  queryOptions: QueryOptions<DataType>,
+) => string
 ```
 
 for examples:
@@ -22,30 +26,15 @@ type User = {
   age: number
 }
 
-// preset five kinds of graphql query strings corresponding to nestjs crud template
-// maybe not all of fives can satisfy requirements, recomend to use createQuery
-const { create, find, findSome, update, remove } = useGraphqlQuery<User>({
-  resource: "user",
-  fields: ["id", "name", "age"],
-  args: { id: 1 },
-})
-
-// create   =>  mutation{createUser(createUserInput:{id:1}){id name age}}
-// find     =>  {findUser(findUserInput:{id:1}){id name age}}
-// findSome =>  {findUsers(findUsersInput:{id:1}){id name age}}
-// update   =>  mutation{updateUser(updateUserInput:{id:1}){id name age}}
-// remove   =>  mutation{removeUser(removeUserInput:{id:1}){id name age}}
-```
-
-```ts
-const query = createQuery<User>(
+// query =>  {getUser{id name}}
+const query = useGraphqlQuery<User>(
   "query",
   () => ({ base: "getUser", input: "getInput" }),
   { resource: "user", fields: ["id", "name"] },
 )
-// query =>  {getUser{id name}}
 
-const mutation = createQuery<User>(
+// mutation =>  mutation{modifyUser(modifyUserInput:{id:1,age:16}){id name age}}
+const mutation = useGraphqlQuery<User>(
   "mutation",
   () => ({ base: "modifyUser", input: "modifyUserInput" }),
   {
@@ -54,15 +43,26 @@ const mutation = createQuery<User>(
     args: { id: 1, age: 16 },
   },
 )
-
-// mutation =>  mutation{modifyUser(modifyUserInput:{id:1,age:16}){id name age}}
 ```
 
 ## server support
 
-It's a highly self-customized hook, you may change server codes... TwT...
+It's a highly self-customized hook.
+
+If you want to use preset five preset five kinds of queries and your server use nestjs, you may need to change server codes... TwT...
 
 A simple example:
+
+```ts
+// client
+// preset five kinds of queries
+
+// create   =>  mutation{createUser(createUserInput:{id:1}){id name age}}
+// find     =>  {findUser(findUserInput:{id:1}){id name age}}
+// findSome =>  {findUsers(findUsersInput:{id:1}){id name age}}
+// update   =>  mutation{updateUser(updateUserInput:{id:1}){id name age}}
+// remove   =>  mutation{removeUser(removeUserInput:{id:1}){id name age}}
+```
 
 ```ts
 // nestjs => user.resolver.ts
