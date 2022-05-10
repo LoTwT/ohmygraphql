@@ -2,7 +2,7 @@ import {
   createDefaultAction,
   createFieldsString,
   createArgsString,
-  createQuery,
+  useGraphqlQuery,
 } from "../src/graphql"
 
 describe("useGraphqlQuery", () => {
@@ -55,8 +55,8 @@ describe("useGraphqlQuery", () => {
     expect(s).toMatchInlineSnapshot('"(createTestInput:{a:\\"A\\",b:\\"B\\"})"')
   })
 
-  it("createQuery create", () => {
-    const query = createQuery("mutation", "create", {
+  it("useGraphqlQuery create", () => {
+    const query = useGraphqlQuery("mutation", "create", {
       resource: "user",
       fields: ["id", "age"],
       args: { name: "username", age: 18, gender: "male" },
@@ -66,8 +66,8 @@ describe("useGraphqlQuery", () => {
     )
   })
 
-  it("createQuery find", () => {
-    const query = createQuery("query", "find", {
+  it("useGraphqlQuery find", () => {
+    const query = useGraphqlQuery("query", "find", {
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2 },
@@ -77,8 +77,8 @@ describe("useGraphqlQuery", () => {
     )
   })
 
-  it("createQuery findAll", () => {
-    const query = createQuery("query", "findSome", {
+  it("useGraphqlQuery findAll", () => {
+    const query = useGraphqlQuery("query", "findSome", {
       resource: "user",
       fields: ["id", "age"],
       args: {},
@@ -86,8 +86,8 @@ describe("useGraphqlQuery", () => {
     expect(query).toMatchInlineSnapshot('"{findUsers{id age}}"')
   })
 
-  it("createQuery update", () => {
-    const query = createQuery("mutation", "update", {
+  it("useGraphqlQuery update", () => {
+    const query = useGraphqlQuery("mutation", "update", {
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2, name: "modified-username" },
@@ -97,8 +97,8 @@ describe("useGraphqlQuery", () => {
     )
   })
 
-  it("createQuery remove", () => {
-    const query = createQuery("mutation", "remove", {
+  it("useGraphqlQuery remove", () => {
+    const query = useGraphqlQuery("mutation", "remove", {
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2 },

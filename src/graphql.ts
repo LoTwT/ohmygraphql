@@ -1,6 +1,5 @@
 import { capitalize } from "./helper"
 import {
-  GraphqlQueryResult,
   ActionType,
   QueryType,
   QueryOptions,
@@ -9,32 +8,13 @@ import {
 } from "./types"
 
 /**
- * a customize hook for client to use graphql query
- * @param { QueryOptions<T> } queryOptions
- * @returns { GraphqlQueryResult } preset five kinds of query for nestjs, also customized
- */
-export const useGraphqlQuery = <DataType extends Record<string, unknown>>(
-  queryOptions: QueryOptions<DataType>,
-): GraphqlQueryResult => {
-  const { resource, fields, args } = queryOptions
-
-  return {
-    create: createQuery("mutation", "create", { resource, fields, args }),
-    find: createQuery("query", "find", { resource, fields, args }),
-    findSome: createQuery("query", "findSome", { resource, fields, args }),
-    update: createQuery("mutation", "update", { resource, fields, args }),
-    remove: createQuery("mutation", "remove", { resource, fields, args }),
-  }
-}
-
-/**
  * help create a graphql query
  * @param { QueryType } type query or mutation
  * @param { ActionType | CreateAction } action five preset actions or a customized createAction fn
  * @param { QueryOptions<T> } queryOptions
  * @returns { string } a customized graphql query string
  */
-export const createQuery = <DataType extends Record<string, unknown>>(
+export const useGraphqlQuery = <DataType extends Record<string, unknown>>(
   type: QueryType,
   action: ActionType | CreateAction,
   queryOptions: QueryOptions<DataType>,
