@@ -4,10 +4,10 @@ export type ActionType = "create" | "find" | "update" | "remove" | "findSome"
 
 export type QueryType = "query" | "mutation"
 
-export type QueryOptions = {
+export type QueryOptions<T extends Record<string, unknown>> = {
   resource: string
-  fields: string[]
-  args?: Record<string, unknown>
+  fields: (keyof T & string)[] | string[]
+  args?: Partial<T>
 }
 
 export type CreateActionResult = {
