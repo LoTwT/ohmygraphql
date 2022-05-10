@@ -2,7 +2,7 @@
   "name": "ohmygraphql",
   "version": "0.0.0",
   "packageManager": "pnpm@7.0.1",
-  "description": "",
+  "description": "a customize hook to generate graphql string for clien in Javascript.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -39,13 +39,19 @@
     "type": "git",
     "url": "git+https://github.com/LoTwT/ohmygraphql.git"
   },
-  "keywords": [],
+  "keywords": [
+    "graphql",
+    "client"
+  ],
   "author": "LoTwT <709937065@qq.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/LoTwT/ohmygraphql/issues"
   },
   "homepage": "https://github.com/LoTwT/ohmygraphql#readme",
+  "dependencies": {
+    "ohmyfetch": "^0.4.16"
+  },
   "devDependencies": {
     "@types/node": "^17.0.31",
     "bumpp": "^7.1.1",
@@ -63,8 +69,5 @@
     "*.{js,ts,json,md}": [
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "ohmyfetch": "^0.4.16"
   }
 }
