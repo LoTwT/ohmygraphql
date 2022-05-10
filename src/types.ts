@@ -1,6 +1,15 @@
-export type ActionType = "create" | "find" | "update" | "remove" | "findSome"
+export type QueryType = "find" | "findSome"
 
-export type QueryType = "query" | "mutation"
+export type MutationType = "create" | "update" | "remove"
+
+export type ActionType = QueryType | MutationType
+
+export type CreateActionResult = {
+  base: string
+  input: string
+}
+
+export type CreateAction = () => CreateActionResult
 
 export type QueryOptions<T extends Record<string, unknown>> = {
   resource: string
@@ -8,8 +17,12 @@ export type QueryOptions<T extends Record<string, unknown>> = {
   args?: Partial<T>
 }
 
-export type CreateActionResult = {
-  base: string
-  input: string
-}
-export type CreateAction = () => CreateActionResult
+export type GraphqlQuery<T extends Record<string, unknown>> = {
+  type: "query"
+  action: QueryType | CreateAction
+} & QueryOptions<T>
+
+export type GraphqlMutation<T extends Record<string, unknown>> = {
+  type: "mutation"
+  action: MutationType | CreateAction
+} & QueryOptions<T>

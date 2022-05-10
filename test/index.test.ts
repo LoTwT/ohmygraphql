@@ -56,7 +56,9 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery create", () => {
-    const query = useGraphqlQuery("mutation", "create", {
+    const query = useGraphqlQuery({
+      type: "mutation",
+      action: "create",
       resource: "user",
       fields: ["id", "age"],
       args: { name: "username", age: 18, gender: "male" },
@@ -67,7 +69,9 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery find", () => {
-    const query = useGraphqlQuery("query", "find", {
+    const query = useGraphqlQuery({
+      type: "query",
+      action: "find",
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2 },
@@ -78,7 +82,9 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery findAll", () => {
-    const query = useGraphqlQuery("query", "findSome", {
+    const query = useGraphqlQuery({
+      type: "query",
+      action: "findSome",
       resource: "user",
       fields: ["id", "age"],
       args: {},
@@ -87,7 +93,9 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery update", () => {
-    const query = useGraphqlQuery("mutation", "update", {
+    const query = useGraphqlQuery({
+      type: "mutation",
+      action: "update",
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2, name: "modified-username" },
@@ -98,7 +106,9 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery remove", () => {
-    const query = useGraphqlQuery("mutation", "remove", {
+    const query = useGraphqlQuery({
+      type: "mutation",
+      action: "remove",
       resource: "user",
       fields: ["id", "age"],
       args: { id: 2 },

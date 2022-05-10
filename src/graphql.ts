@@ -1,27 +1,22 @@
 import { capitalize } from "./helper"
 import {
   ActionType,
-  QueryType,
-  QueryOptions,
-  CreateAction,
   CreateActionResult,
+  GraphqlQuery,
+  GraphqlMutation,
 } from "./types"
 
 /**
  * help create a graphql query
- * @param { QueryType } type query or mutation
- * @param { ActionType | CreateAction } action five preset actions or a customized createAction fn
- * @param { QueryOptions<T> } queryOptions
+ * @param { GraphqlQuery<T> | GraphqlMutation<T> } options
  * @returns { string } a customized graphql query string
  */
 export const useGraphqlQuery = <DataType extends Record<string, unknown>>(
-  type: QueryType,
-  action: ActionType | CreateAction,
-  queryOptions: QueryOptions<DataType>,
+  options: GraphqlQuery<DataType> | GraphqlMutation<DataType>,
 ) => {
-  const queryTypeString = type === "query" ? "" : "mutation"
+  const { type, action, resource, fields, args } = options
 
-  const { resource, fields, args } = queryOptions
+  const queryTypeString = type === "query" ? "" : "mutation"
 
   const { base: actionString, input: actionInput } =
     typeof action === "function"
