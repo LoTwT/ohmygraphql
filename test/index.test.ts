@@ -1,9 +1,9 @@
 import {
-  createArgsString,
   createDefaultAction,
   createFieldsString,
+  createArgsString,
   createQuery,
-} from "../src"
+} from "../src/graphql"
 
 describe("useGraphqlQuery", () => {
   it("createDefaultAction", () => {
