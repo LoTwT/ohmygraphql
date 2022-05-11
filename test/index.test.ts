@@ -77,7 +77,7 @@ describe("useGraphqlQuery", () => {
       args: { id: 2 },
     })
     expect(query).toMatchInlineSnapshot(
-      '"{findUser(findUserInput:{id:2}){id age}}"',
+      '"query{findUser(findUserInput:{id:2}){id age}}"',
     )
   })
 
@@ -89,7 +89,7 @@ describe("useGraphqlQuery", () => {
       fields: ["id", "age"],
       args: {},
     })
-    expect(query).toMatchInlineSnapshot('"{findUsers{id age}}"')
+    expect(query).toMatchInlineSnapshot('"query{findUsers{id age}}"')
   })
 
   it("useGraphqlQuery update", () => {

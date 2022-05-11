@@ -16,7 +16,7 @@ export const useGraphqlQuery = <DataType extends Record<string, unknown>>(
 ) => {
   const { type, action, resource, fields, args } = options
 
-  const queryTypeString = type === "query" ? "" : "mutation"
+  const queryTypeString = type === "query" ? "query" : "mutation"
 
   const { base: actionString, input: actionInput } =
     typeof action === "function"
