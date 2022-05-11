@@ -11,9 +11,11 @@ export type CreateActionResult = {
 
 export type CreateAction = () => CreateActionResult
 
+export type MetaFields = "__typename"
+
 export type QueryOptions<T extends Record<string, unknown>> = {
   resource: string
-  fields: (keyof T & string)[] | string[]
+  fields: ((keyof T & string) | MetaFields)[] | string[]
   args?: Partial<T>
 }
 
