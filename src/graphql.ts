@@ -52,15 +52,23 @@ export const createArgsString = (
   args: Record<string, unknown>,
   actionInput: string,
 ) => {
-  let argsString = ""
+  const argsString = gqlStringify(args, "")
+  return `(${actionInput}:{${argsString}})`
+}
 
-  // todo elegantly stringify obj
+export const gqlStringify = (args: Record<string, unknown>, s = "") => {
   for (const key in args) {
     const value = args[key]
-    argsString += `,${key}:${typeof value === "number" ? value : `"${value}"`}`
+
+    if (typeof value === "object" && value !== null) {
+      if (Object.keys(value).length === 0) s += `,${key}:{}`
+      else s += `,${key}:{${gqlStringify(value as Record<string, unknown>)}}`
+    } else if (typeof value === "string") {
+      s += `,${key}:"${value}"`
+    } else {
+      s += `,${key}:${value}`
+    }
   }
 
-  argsString = argsString.substring(1)
-
-  return `(${actionInput}:{${argsString}})`
+  return s[0] === "," ? s.substring(1) : s
 }

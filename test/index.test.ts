@@ -51,8 +51,41 @@ describe("useGraphqlQuery", () => {
   })
 
   it("createArgsString", () => {
-    const s = createArgsString({ a: "A", b: "B" }, "createTestInput")
-    expect(s).toMatchInlineSnapshot('"(createTestInput:{a:\\"A\\",b:\\"B\\"})"')
+    const user = {
+      id: 1,
+      name: "user",
+      isStudent: true,
+    }
+    expect(createArgsString(user, "createUserInput")).toMatchInlineSnapshot(
+      '"(createUserInput:{id:1,name:\\"user\\",isStudent:true})"',
+    )
+
+    const emptyObj = {}
+    expect(createArgsString(emptyObj, "findUsersInput")).toMatchInlineSnapshot(
+      '"(findUsersInput:{})"',
+    )
+
+    const nestedObj = {
+      id: 1,
+      name: "user",
+      nested: {
+        id: 2,
+        name: "nest",
+        empty: {},
+      },
+    }
+
+    expect(createArgsString(nestedObj, "nestedInput")).toMatchInlineSnapshot(
+      '"(nestedInput:{id:1,name:\\"user\\",nested:{id:2,name:\\"nest\\",empty:{}}})"',
+    )
+
+    const nullValueObj = {
+      value: null,
+    }
+
+    expect(createArgsString(nullValueObj, "nullInput")).toMatchInlineSnapshot(
+      '"(nullInput:{value:null})"',
+    )
   })
 
   it("useGraphqlQuery create", () => {

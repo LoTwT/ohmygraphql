@@ -14,11 +14,11 @@ A customize graphql hook for client in Javascript / Typescript.
 - [x] basic CRUD presets ( create, find, findSome, update, remove)
 - [x] customized query string
 - [x] basic typescript annotation
+- [x] stringify nested args
 
 <br />
 
 - [ ] api refactor
-- [ ] stringify nested args
 - [ ] multiple actions
 - [ ] reactive query string
 - [ ] graphql meta fields
