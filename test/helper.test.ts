@@ -1,4 +1,4 @@
-import { capitalize } from "../src/helper"
+import { capitalize, kebab2Camel } from "../src/helper"
 
 describe("helper", () => {
   it("capitalize", () => {
@@ -9,5 +9,15 @@ describe("helper", () => {
     expect(str1).toBe("Abc")
     expect(str2).toBe("ABC")
     expect(str3).toBe("Abc")
+  })
+
+  it("kebab2Camel", () => {
+    expect(kebab2Camel("")).toBe("")
+    expect(kebab2Camel("-a")).toBe("a")
+    expect(kebab2Camel("create-user")).toBe("createUser")
+    expect(kebab2Camel("Create-user")).toBe("createUser")
+    expect(kebab2Camel("-create-user")).toBe("createUser")
+    expect(kebab2Camel("-create - user")).toBe("createUser")
+    expect(kebab2Camel("-create - User")).toBe("createUser")
   })
 })
