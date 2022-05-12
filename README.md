@@ -18,6 +18,7 @@ A customize graphql hook for client in Javascript / Typescript.
 <br />
 
 - [ ] api refactor
+- [ ] stringify nested args
 - [ ] multiple actions
 - [ ] reactive query string
 - [ ] graphql meta fields
