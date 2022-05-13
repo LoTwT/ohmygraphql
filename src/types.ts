@@ -1,34 +1,46 @@
-export type GqlQueryActionOptions = {
+export type GqlActionOptions = {
   type: string
   input?: string
 }
 
-export type GqlMutationActionOptions = {
-  type: string
-  input: string
-}
+export type OperationType = "query" | "mutation"
 
-export type GqlActionOptions<O extends "query" | "mutation"> = O extends "query"
-  ? GqlQueryActionOptions
-  : GqlMutationActionOptions
-
-// export type CreateAction<O extends "query" | "mutation"> =
-//   () => GqlActionOptions<O>
-
-export type DataType = Record<string, unknown>
-
-export type GqlParams<T extends DataType, O extends "query" | "mutation"> = {
-  action: GqlActionOptions<O>
+export type GqlParams<T, O extends OperationType> = {
+  action: O extends "query" ? GqlActionOptions : Required<GqlActionOptions>
   fields: (keyof T & string)[] | string[]
   args?: Partial<T>
 }
 
-export type GraphqlQuery<T extends DataType> = {
+export type GqlQuery<T> = {
   operation: "query"
-  params: GqlParams<T, "query">
+  params: isTuple<T> extends true
+    ? GqlMultiParams<T, "query">
+    : GqlParams<T, "query">
 }
 
-export type GraphqlMutation<T extends DataType> = {
+export type GqlMutation<T> = {
   operation: "mutation"
-  params: Required<GqlParams<T, "mutation">>
+  params: isTuple<T> extends true
+    ? GqlMultiParams<T, "mutation">
+    : GqlParams<T, "mutation">
 }
+
+export type GqlMultiParams<
+  T,
+  O extends OperationType,
+  R extends unknown[] = [],
+> = T extends [infer F, ...infer Rest]
+  ? GqlMultiParams<
+      Rest,
+      O,
+      [...R, O extends "query" ? GqlParams<F, O> : Required<GqlParams<F, O>>]
+    >
+  : R
+
+export type isTuple<T> = [T] extends [never]
+  ? false
+  : T extends readonly unknown[]
+  ? number extends T["length"]
+    ? false
+    : true
+  : false

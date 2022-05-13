@@ -1,23 +1,30 @@
 import { kebab2Camel } from "./helper"
-import { GraphqlQuery, GraphqlMutation, DataType } from "./types"
+import { GqlQuery, GqlMutation } from "./types"
 
-export const useGraphql = <T extends DataType>(
-  options: GraphqlQuery<T> | GraphqlMutation<T>,
-) => {
+export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
   const { operation, params } = options
-  const { action, fields, args } = params
 
   const queryTypeString = operation === "query" ? "query" : "mutation"
 
-  const actionString = createActionString(action, fields, args)
+  let actionString = ""
 
-  return `${queryTypeString}{${actionString}}}`
+  if (Array.isArray(params)) {
+    for (let i = 0; i < params.length; i++) {
+      const { action, fields, args } = params[i]
+      actionString += createActionString(action, fields, args)
+    }
+  } else {
+    const { action, fields, args } = params
+    actionString = createActionString(action, fields, args)
+  }
+
+  return `${queryTypeString}{${actionString}}`
 }
 
 export const createActionString = (
   action: { type: string; input?: string },
   fields: string[],
-  args?: DataType,
+  args?: Record<string, any>,
 ) => {
   const { type: actionType, input: actionInput } = action
 
@@ -32,7 +39,7 @@ export const createActionString = (
 
   const fieldsString = createFieldsString(fields)
 
-  return `${actionTypeString}${argsString}{${fieldsString}`
+  return `${actionTypeString}${argsString}{${fieldsString}}`
 }
 
 export const createFieldsString = (fields: string[]) => fields.join(" ")

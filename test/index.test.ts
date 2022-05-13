@@ -12,6 +12,14 @@ describe("useGraphql", () => {
     gender: string
   }
 
+  type Article = {
+    id: number
+    title: string
+    content: string
+    createAt: string
+    updateAt: string
+  }
+
   it("createFieldsString", () => {
     const s = createFieldsString(["a", "b", "c"])
     expect(s).toMatchInlineSnapshot('"a b c"')
@@ -135,6 +143,58 @@ describe("useGraphql", () => {
     })
     expect(query).toMatchInlineSnapshot(
       '"mutation{removeUser(removeUserInput:{id:2}){id age}}"',
+    )
+  })
+
+  it("multiple actions", () => {
+    const query = useGraphql<[Article, User]>({
+      operation: "query",
+      params: [
+        {
+          action: {
+            type: "article",
+          },
+          fields: ["id", "title", "content"],
+        },
+        {
+          action: {
+            type: "user",
+          },
+          fields: ["id", "name"],
+        },
+      ],
+    })
+
+    expect(query).toMatchInlineSnapshot(
+      '"query{article{id title content}user{id name}}"',
+    )
+
+    const mutation = useGraphql<[User, Article]>({
+      operation: "mutation",
+      params: [
+        {
+          action: {
+            type: "user",
+            input: "create-user",
+          },
+          fields: ["id", "name"],
+          args: { name: "newName" },
+        },
+        {
+          action: {
+            type: "article",
+            input: "create-article",
+          },
+          fields: ["id", "title", "content"],
+          args: {
+            title: "newTitle",
+          },
+        },
+      ],
+    })
+
+    expect(mutation).toMatchInlineSnapshot(
+      '"mutation{user(createUser:{name:\\"newName\\"}){id name}article(createArticle:{title:\\"newTitle\\"}){id title content}}"',
     )
   })
 })
