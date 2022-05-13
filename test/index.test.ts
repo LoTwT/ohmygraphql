@@ -51,10 +51,10 @@ describe("useGraphqlQuery", () => {
   it("useGraphqlQuery create", () => {
     const query = useGraphql({
       operation: "mutation",
-      action: () => ({
+      action: {
         type: "create-user",
         input: "createUserInput",
-      }),
+      },
       fields: ["id", "age"],
       args: { name: "username", age: 18, gender: "male" },
     })
@@ -66,10 +66,10 @@ describe("useGraphqlQuery", () => {
   it("useGraphqlQuery find", () => {
     const query = useGraphql({
       operation: "query",
-      action: () => ({
+      action: {
         type: "findUser",
         input: "find-user-input",
-      }),
+      },
       fields: ["id", "age"],
       args: { id: 2 },
     })
@@ -81,10 +81,10 @@ describe("useGraphqlQuery", () => {
   it("useGraphqlQuery findAll", () => {
     const query = useGraphql({
       operation: "query",
-      action: () => ({
+      action: {
         type: "findUsers",
         input: "findUsersInput",
-      }),
+      },
       fields: ["id", "age"],
       args: {},
     })
@@ -94,10 +94,10 @@ describe("useGraphqlQuery", () => {
   it("useGraphqlQuery update", () => {
     const query = useGraphql({
       operation: "mutation",
-      action: () => ({
+      action: {
         type: "update-user",
         input: "update-user-input",
-      }),
+      },
       fields: ["id", "age"],
       args: { id: 2, name: "modified-username" },
     })
@@ -109,10 +109,10 @@ describe("useGraphqlQuery", () => {
   it("useGraphqlQuery remove", () => {
     const query = useGraphql({
       operation: "mutation",
-      action: () => ({
+      action: {
         type: "remove-user",
         input: "remove-user-input",
-      }),
+      },
       fields: ["id", "age"],
       args: { id: 2 },
     })

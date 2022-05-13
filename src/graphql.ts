@@ -1,19 +1,24 @@
 import { kebab2Camel } from "./helper"
-import { GraphqlQuery, GraphqlMutation } from "./types"
+import { GraphqlQuery, GraphqlMutation, DataType } from "./types"
 
-/**
- * help create a graphql query
- * @param { GraphqlQuery<T> | GraphqlMutation<T> } options
- * @returns { string } a customized graphql query string
- */
-export const useGraphql = <DataType extends Record<string, unknown>>(
-  options: GraphqlQuery<DataType> | GraphqlMutation<DataType>,
+export const useGraphql = <T extends DataType>(
+  options: GraphqlQuery<T> | GraphqlMutation<T>,
 ) => {
   const { operation, action, fields, args } = options
 
   const queryTypeString = operation === "query" ? "query" : "mutation"
 
-  const { type: actionType, input: actionInput } = action()
+  const actionString = createActionString(action, fields, args)
+
+  return `${queryTypeString}{${actionString}}}`
+}
+
+export const createActionString = (
+  action: { type: string; input?: string },
+  fields: string[],
+  args?: DataType,
+) => {
+  const { type: actionType, input: actionInput } = action
 
   const actionTypeString = kebab2Camel(actionType)
 
@@ -26,7 +31,7 @@ export const useGraphql = <DataType extends Record<string, unknown>>(
 
   const fieldsString = createFieldsString(fields)
 
-  return `${queryTypeString}{${actionTypeString}${argsString}{${fieldsString}}}`
+  return `${actionTypeString}${argsString}{${fieldsString}`
 }
 
 export const createFieldsString = (fields: string[]) => fields.join(" ")
