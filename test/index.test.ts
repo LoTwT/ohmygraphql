@@ -1,50 +1,10 @@
 import {
-  createDefaultAction,
   createFieldsString,
   createArgsString,
-  useGraphqlQuery,
+  useGraphql,
 } from "../src/graphql"
 
 describe("useGraphqlQuery", () => {
-  it("createDefaultAction", () => {
-    const a1 = createDefaultAction("create", "user")
-    const a2 = createDefaultAction("find", "user")
-    const a3 = createDefaultAction("findSome", "user")
-    const a4 = createDefaultAction("update", "user")
-    const a5 = createDefaultAction("remove", "user")
-
-    expect(a1).toMatchInlineSnapshot(`
-      {
-        "base": "createUser",
-        "input": "createUserInput",
-      }
-    `)
-    expect(a2).toMatchInlineSnapshot(`
-      {
-        "base": "findUser",
-        "input": "findUserInput",
-      }
-    `)
-    expect(a3).toMatchInlineSnapshot(`
-      {
-        "base": "findUsers",
-        "input": "findUsersInput",
-      }
-    `)
-    expect(a4).toMatchInlineSnapshot(`
-      {
-        "base": "updateUser",
-        "input": "updateUserInput",
-      }
-    `)
-    expect(a5).toMatchInlineSnapshot(`
-      {
-        "base": "removeUser",
-        "input": "removeUserInput",
-      }
-    `)
-  })
-
   it("createFieldsString", () => {
     const s = createFieldsString(["a", "b", "c"])
     expect(s).toMatchInlineSnapshot('"a b c"')
@@ -89,10 +49,12 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery create", () => {
-    const query = useGraphqlQuery({
-      type: "mutation",
-      action: "create",
-      resource: "user",
+    const query = useGraphql({
+      operation: "mutation",
+      action: () => ({
+        type: "create-user",
+        input: "createUserInput",
+      }),
       fields: ["id", "age"],
       args: { name: "username", age: 18, gender: "male" },
     })
@@ -102,10 +64,12 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery find", () => {
-    const query = useGraphqlQuery({
-      type: "query",
-      action: "find",
-      resource: "user",
+    const query = useGraphql({
+      operation: "query",
+      action: () => ({
+        type: "findUser",
+        input: "find-user-input",
+      }),
       fields: ["id", "age"],
       args: { id: 2 },
     })
@@ -115,10 +79,12 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery findAll", () => {
-    const query = useGraphqlQuery({
-      type: "query",
-      action: "findSome",
-      resource: "user",
+    const query = useGraphql({
+      operation: "query",
+      action: () => ({
+        type: "findUsers",
+        input: "findUsersInput",
+      }),
       fields: ["id", "age"],
       args: {},
     })
@@ -126,10 +92,12 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery update", () => {
-    const query = useGraphqlQuery({
-      type: "mutation",
-      action: "update",
-      resource: "user",
+    const query = useGraphql({
+      operation: "mutation",
+      action: () => ({
+        type: "update-user",
+        input: "update-user-input",
+      }),
       fields: ["id", "age"],
       args: { id: 2, name: "modified-username" },
     })
@@ -139,10 +107,12 @@ describe("useGraphqlQuery", () => {
   })
 
   it("useGraphqlQuery remove", () => {
-    const query = useGraphqlQuery({
-      type: "mutation",
-      action: "remove",
-      resource: "user",
+    const query = useGraphql({
+      operation: "mutation",
+      action: () => ({
+        type: "remove-user",
+        input: "remove-user-input",
+      }),
       fields: ["id", "age"],
       args: { id: 2 },
     })

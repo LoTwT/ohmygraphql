@@ -1,1 +1,1 @@
-export { useGraphqlQuery } from "./graphql"
+export { useGraphql as useGraphqlQuery } from "./graphql"

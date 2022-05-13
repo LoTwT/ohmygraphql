@@ -1,49 +1,32 @@
-import { capitalize } from "./helper"
-import {
-  ActionType,
-  CreateActionResult,
-  GraphqlQuery,
-  GraphqlMutation,
-} from "./types"
+import { kebab2Camel } from "./helper"
+import { GraphqlQuery, GraphqlMutation } from "./types"
 
 /**
  * help create a graphql query
  * @param { GraphqlQuery<T> | GraphqlMutation<T> } options
  * @returns { string } a customized graphql query string
  */
-export const useGraphqlQuery = <DataType extends Record<string, unknown>>(
+export const useGraphql = <DataType extends Record<string, unknown>>(
   options: GraphqlQuery<DataType> | GraphqlMutation<DataType>,
 ) => {
-  const { type, action, resource, fields, args } = options
+  const { operation, action, fields, args } = options
 
-  const queryTypeString = type === "query" ? "query" : "mutation"
+  const queryTypeString = operation === "query" ? "query" : "mutation"
 
-  const { base: actionString, input: actionInput } =
-    typeof action === "function"
-      ? action()
-      : createDefaultAction(action, resource)
+  const { type: actionType, input: actionInput } = action()
+
+  const actionTypeString = kebab2Camel(actionType)
 
   const hasArgs = !!(args && Object.keys(args).length)
 
-  const argsString = hasArgs ? createArgsString(args, actionInput) : ""
+  const argsString =
+    hasArgs && actionInput
+      ? createArgsString(args, kebab2Camel(actionInput))
+      : ""
 
   const fieldsString = createFieldsString(fields)
 
-  return `${queryTypeString}{${actionString}${argsString}{${fieldsString}}}`
-}
-
-export const createDefaultAction = (
-  action: ActionType,
-  resource: string,
-): CreateActionResult => {
-  const isFindSome = action === "findSome"
-  const actionString = `${isFindSome ? "find" : action}${capitalize(resource)}${
-    isFindSome ? "s" : ""
-  }`
-  return {
-    base: actionString,
-    input: `${actionString}Input`,
-  }
+  return `${queryTypeString}{${actionTypeString}${argsString}{${fieldsString}}}`
 }
 
 export const createFieldsString = (fields: string[]) => fields.join(" ")
