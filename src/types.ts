@@ -22,7 +22,7 @@ export type GqlMutation<T> = {
   operation: "mutation"
   params: isTuple<T> extends true
     ? GqlMultiParams<T, "mutation">
-    : GqlParams<T, "mutation">
+    : Required<GqlParams<T, "mutation">>
 }
 
 export type GqlMultiParams<
