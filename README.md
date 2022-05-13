@@ -11,15 +11,14 @@ A customize graphql hook for client in Javascript / Typescript.
 
 ## todolist
 
-- [x] basic CRUD presets ( create, find, findSome, update, remove)
 - [x] customized query string
 - [x] basic typescript annotation
 - [x] stringify nested args
+- [x] api refactor
+- [x] multiple actions
+- [x] advanced typescript annotation (when a query returns union type)
 
 <br />
 
-- [ ] api refactor
-- [ ] multiple actions
 - [ ] reactive query string
 - [ ] graphql meta fields
-- [ ] advanced typescript annotation (when a query returns union type)
