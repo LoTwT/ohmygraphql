@@ -25,8 +25,10 @@ export type GqlParams<T extends DataType, O extends "query" | "mutation"> = {
 
 export type GraphqlQuery<T extends DataType> = {
   operation: "query"
-} & GqlParams<T, "query">
+  params: GqlParams<T, "query">
+}
 
-export type GraphqlMutation<T extends Record<string, unknown>> = {
+export type GraphqlMutation<T extends DataType> = {
   operation: "mutation"
-} & Required<GqlParams<T, "mutation">>
+  params: Required<GqlParams<T, "mutation">>
+}

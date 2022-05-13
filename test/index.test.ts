@@ -4,7 +4,14 @@ import {
   useGraphql,
 } from "../src/graphql"
 
-describe("useGraphqlQuery", () => {
+describe("useGraphql", () => {
+  type User = {
+    id: number
+    name: string
+    age: number
+    gender: string
+  }
+
   it("createFieldsString", () => {
     const s = createFieldsString(["a", "b", "c"])
     expect(s).toMatchInlineSnapshot('"a b c"')
@@ -48,73 +55,83 @@ describe("useGraphqlQuery", () => {
     )
   })
 
-  it("useGraphqlQuery create", () => {
-    const query = useGraphql({
+  it("create", () => {
+    const query = useGraphql<User>({
       operation: "mutation",
-      action: {
-        type: "create-user",
-        input: "createUserInput",
+      params: {
+        action: {
+          type: "create-user",
+          input: "createUserInput",
+        },
+        fields: ["id", "age"],
+        args: { name: "username", age: 18, gender: "male" },
       },
-      fields: ["id", "age"],
-      args: { name: "username", age: 18, gender: "male" },
     })
     expect(query).toMatchInlineSnapshot(
       '"mutation{createUser(createUserInput:{name:\\"username\\",age:18,gender:\\"male\\"}){id age}}"',
     )
   })
 
-  it("useGraphqlQuery find", () => {
-    const query = useGraphql({
+  it("find", () => {
+    const query = useGraphql<User>({
       operation: "query",
-      action: {
-        type: "findUser",
-        input: "find-user-input",
+      params: {
+        action: {
+          type: "findUser",
+          input: "find-user-input",
+        },
+        fields: ["id", "age"],
+        args: { id: 2 },
       },
-      fields: ["id", "age"],
-      args: { id: 2 },
     })
     expect(query).toMatchInlineSnapshot(
       '"query{findUser(findUserInput:{id:2}){id age}}"',
     )
   })
 
-  it("useGraphqlQuery findAll", () => {
-    const query = useGraphql({
+  it("findAll", () => {
+    const query = useGraphql<User>({
       operation: "query",
-      action: {
-        type: "findUsers",
-        input: "findUsersInput",
+      params: {
+        action: {
+          type: "findUsers",
+          input: "findUsersInput",
+        },
+        fields: ["id", "age"],
+        args: {},
       },
-      fields: ["id", "age"],
-      args: {},
     })
     expect(query).toMatchInlineSnapshot('"query{findUsers{id age}}"')
   })
 
-  it("useGraphqlQuery update", () => {
-    const query = useGraphql({
+  it("update", () => {
+    const query = useGraphql<User>({
       operation: "mutation",
-      action: {
-        type: "update-user",
-        input: "update-user-input",
+      params: {
+        action: {
+          type: "update-user",
+          input: "update-user-input",
+        },
+        fields: ["id", "age"],
+        args: { id: 2, name: "modified-username" },
       },
-      fields: ["id", "age"],
-      args: { id: 2, name: "modified-username" },
     })
     expect(query).toMatchInlineSnapshot(
       '"mutation{updateUser(updateUserInput:{id:2,name:\\"modified-username\\"}){id age}}"',
     )
   })
 
-  it("useGraphqlQuery remove", () => {
-    const query = useGraphql({
+  it("remove", () => {
+    const query = useGraphql<User>({
       operation: "mutation",
-      action: {
-        type: "remove-user",
-        input: "remove-user-input",
+      params: {
+        action: {
+          type: "remove-user",
+          input: "remove-user-input",
+        },
+        fields: ["id", "age"],
+        args: { id: 2 },
       },
-      fields: ["id", "age"],
-      args: { id: 2 },
     })
     expect(query).toMatchInlineSnapshot(
       '"mutation{removeUser(removeUserInput:{id:2}){id age}}"',

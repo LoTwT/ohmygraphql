@@ -4,7 +4,8 @@ import { GraphqlQuery, GraphqlMutation, DataType } from "./types"
 export const useGraphql = <T extends DataType>(
   options: GraphqlQuery<T> | GraphqlMutation<T>,
 ) => {
-  const { operation, action, fields, args } = options
+  const { operation, params } = options
+  const { action, fields, args } = params
 
   const queryTypeString = operation === "query" ? "query" : "mutation"
 
