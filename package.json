@@ -33,7 +33,7 @@
     "release": "bumpp --commit --push --tag && npm publish",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "postinstall": "husky install"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
