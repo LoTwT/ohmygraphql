@@ -1,3 +1,7 @@
+export type GqlFields<T = {}> =
+  | (keyof T & string)[]
+  | (string | Record<string, unknown>)[]
+
 export type GqlActionOptions = {
   type: string
   input?: string
@@ -7,7 +11,7 @@ export type OperationType = "query" | "mutation"
 
 export type GqlParams<T, O extends OperationType> = {
   action: O extends "query" ? GqlActionOptions : Required<GqlActionOptions>
-  fields: (keyof T & string)[] | string[]
+  fields: GqlFields<T>
   args?: Partial<T>
 }
 

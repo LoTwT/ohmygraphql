@@ -1,5 +1,5 @@
 import { kebab2Camel } from "./helper"
-import { GqlQuery, GqlMutation } from "./types"
+import { GqlQuery, GqlMutation, GqlFields } from "./types"
 
 export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
   const { operation, params } = options
@@ -23,7 +23,7 @@ export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
 
 export const createActionString = (
   action: { type: string; input?: string },
-  fields: string[],
+  fields: GqlFields,
   args?: Record<string, any>,
 ) => {
   const { type: actionType, input: actionInput } = action
@@ -42,7 +42,18 @@ export const createActionString = (
   return `${actionTypeString}${argsString}{${fieldsString}}`
 }
 
-export const createFieldsString = (fields: string[]) => fields.join(" ")
+export const createFieldsString = (fields: GqlFields) => {
+  let ret = ""
+
+  for (let i = 0; i < fields.length; i++) {
+    const f = fields[i]
+
+    if (typeof f === "string") ret += `,${f}`
+    else ret += `,${gqlStringify(f)}`
+  }
+
+  return ret === "" ? ret : ret.substring(1)
+}
 
 export const createArgsString = (
   args: Record<string, unknown>,

@@ -22,7 +22,7 @@ describe("useGraphql", () => {
 
   it("createFieldsString", () => {
     const s = createFieldsString(["a", "b", "c"])
-    expect(s).toMatchInlineSnapshot('"a b c"')
+    expect(s).toMatchInlineSnapshot('"a,b,c"')
   })
 
   it("createArgsString", () => {
@@ -76,7 +76,7 @@ describe("useGraphql", () => {
       },
     })
     expect(query).toMatchInlineSnapshot(
-      '"mutation{createUser(createUserInput:{name:\\"username\\",age:18,gender:\\"male\\"}){id age}}"',
+      '"mutation{createUser(createUserInput:{name:\\"username\\",age:18,gender:\\"male\\"}){id,age}}"',
     )
   })
 
@@ -93,7 +93,7 @@ describe("useGraphql", () => {
       },
     })
     expect(query).toMatchInlineSnapshot(
-      '"query{findUser(findUserInput:{id:2}){id age}}"',
+      '"query{findUser(findUserInput:{id:2}){id,age}}"',
     )
   })
 
@@ -109,7 +109,7 @@ describe("useGraphql", () => {
         args: {},
       },
     })
-    expect(query).toMatchInlineSnapshot('"query{findUsers{id age}}"')
+    expect(query).toMatchInlineSnapshot('"query{findUsers{id,age}}"')
   })
 
   it("update", () => {
@@ -125,7 +125,7 @@ describe("useGraphql", () => {
       },
     })
     expect(query).toMatchInlineSnapshot(
-      '"mutation{updateUser(updateUserInput:{id:2,name:\\"modified-username\\"}){id age}}"',
+      '"mutation{updateUser(updateUserInput:{id:2,name:\\"modified-username\\"}){id,age}}"',
     )
   })
 
@@ -142,7 +142,7 @@ describe("useGraphql", () => {
       },
     })
     expect(query).toMatchInlineSnapshot(
-      '"mutation{removeUser(removeUserInput:{id:2}){id age}}"',
+      '"mutation{removeUser(removeUserInput:{id:2}){id,age}}"',
     )
   })
 
@@ -166,7 +166,7 @@ describe("useGraphql", () => {
     })
 
     expect(query).toMatchInlineSnapshot(
-      '"query{article{id title content}user{id name}}"',
+      '"query{article{id,title,content}user{id,name}}"',
     )
 
     const mutation = useGraphql<[User, Article]>({
@@ -194,7 +194,7 @@ describe("useGraphql", () => {
     })
 
     expect(mutation).toMatchInlineSnapshot(
-      '"mutation{user(createUser:{name:\\"newName\\"}){id name}article(createArticle:{title:\\"newTitle\\"}){id title content}}"',
+      '"mutation{user(createUser:{name:\\"newName\\"}){id,name}article(createArticle:{title:\\"newTitle\\"}){id,title,content}}"',
     )
   })
 })
