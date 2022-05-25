@@ -1,10 +1,13 @@
 import { removeInitial, isEmptyObj } from "./helper"
-import { BaseObject, GqlScope, GqlScopeBody } from "./types"
+import {
+  BaseObject,
+  GqlMutation,
+  GqlQuery,
+  GqlScope,
+  GqlScopeBody,
+} from "./types"
 
-export const useGraphql = (options: {
-  operation: "query"
-  scope: GqlScope
-}) => {
+export const useGraphql = (options: GqlQuery | GqlMutation) => {
   const { operation, scope } = options
   return `${operation}{${serializeScope(scope)}}`
 }

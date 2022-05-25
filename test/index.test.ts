@@ -1,6 +1,37 @@
-import { serializeBody, serializeArgs } from "../src/graphql"
+import { serializeBody, serializeArgs, useGraphql } from "../src/graphql"
 
 describe("useGraphql", () => {
+  it("useGraphql", () => {
+    const query = useGraphql({
+      operation: "query",
+      scope: {
+        name: "repository",
+        args: { owner: "developer-plus", name: "interview" },
+        body: [
+          {
+            name: "pinnedIssues",
+            args: { last: 3 },
+            body: [
+              {
+                name: "nodes",
+                body: [
+                  {
+                    name: "issue",
+                    body: [{ name: "author", body: ["login"] }, "title", "url"],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    })
+
+    expect(query).toBe(
+      `query{repository(owner:"developer-plus",name:"interview"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}`,
+    )
+  })
+
   it("serializeBody", () => {
     const r1 = serializeBody(["x", "ruebe", "zett"])
     const r2 = serializeBody([
