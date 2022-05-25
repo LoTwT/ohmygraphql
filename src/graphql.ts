@@ -4,8 +4,6 @@ import { GqlQuery, GqlMutation, GqlFields, BaseObject } from "./types"
 export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
   const { operation, params } = options
 
-  const queryTypeString = operation === "query" ? "query" : "mutation"
-
   let actionString = ""
 
   if (Array.isArray(params)) {
@@ -18,7 +16,7 @@ export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
     actionString = createActionString(action, fields, args)
   }
 
-  return `${queryTypeString}{${actionString}}`
+  return `${operation}{${actionString}}`
 }
 
 export const createActionString = (
