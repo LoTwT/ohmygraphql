@@ -1,200 +1,35 @@
-import {
-  createFieldsString,
-  createArgsString,
-  useGraphql,
-} from "../src/graphql"
+import { serializeBody, serializeArgs } from "../src/graphql"
 
 describe("useGraphql", () => {
-  type User = {
-    id: number
-    name: string
-    age: number
-    gender: string
-  }
+  it("serializeBody", () => {
+    const r1 = serializeBody(["x", "ruebe", "zett"])
+    const r2 = serializeBody([
+      { name: "x", body: ["human"] },
+      { name: "ruebe", args: {}, body: ["human"] },
+      { name: "zett", args: { type: "delta" }, body: ["human"] },
+    ])
+    const r3 = serializeBody(["x", { name: "ruebe", body: ["human"] }, "zett"])
 
-  type Article = {
-    id: number
-    title: string
-    content: string
-    createAt: string
-    updateAt: string
-  }
-
-  it("createFieldsString", () => {
-    const s = createFieldsString(["a", "b", "c"])
-    expect(s).toMatchInlineSnapshot('"a,b,c"')
+    expect(r1).toMatchInlineSnapshot('"{x,ruebe,zett}"')
+    expect(r2).toMatchInlineSnapshot(
+      '"{x{human},ruebe{human},zett(type:\\"delta\\"){human}}"',
+    )
+    expect(r3).toMatchInlineSnapshot('"{x,ruebe{human},zett}"')
   })
 
-  it("createArgsString", () => {
-    const user = {
-      id: 1,
-      name: "user",
-      isStudent: true,
-    }
-    expect(createArgsString(user, "createUserInput")).toMatchInlineSnapshot(
-      '"(createUserInput:{id:1,name:\\"user\\",isStudent:true})"',
-    )
-
-    const emptyObj = {}
-    expect(createArgsString(emptyObj, "findUsersInput")).toMatchInlineSnapshot(
-      '"(findUsersInput:{})"',
-    )
-
-    const nestedObj = {
-      id: 1,
-      name: "user",
-      nested: {
-        id: 2,
-        name: "nest",
-        empty: {},
-      },
-    }
-
-    expect(createArgsString(nestedObj, "nestedInput")).toMatchInlineSnapshot(
-      '"(nestedInput:{id:1,name:\\"user\\",nested:{id:2,name:\\"nest\\",empty:{}}})"',
-    )
-
-    const nullValueObj = {
-      value: null,
-    }
-
-    expect(createArgsString(nullValueObj, "nullInput")).toMatchInlineSnapshot(
-      '"(nullInput:{value:null})"',
-    )
-  })
-
-  it("create", () => {
-    const query = useGraphql<User>({
-      operation: "mutation",
-      params: {
-        action: {
-          type: "create-user",
-          input: "createUserInput",
-        },
-        fields: ["id", "age"],
-        args: { name: "username", age: 18, gender: "male" },
+  it("serializeArgs", () => {
+    const r1 = serializeArgs({ ultra: "x", human: "daichi" })
+    const r2 = serializeArgs({
+      ultra: "zett",
+      type: {
+        name: "alpha",
+        medals: { one: "zero", two: "seven", three: "leo" },
       },
     })
-    expect(query).toMatchInlineSnapshot(
-      '"mutation{createUser(createUserInput:{name:\\"username\\",age:18,gender:\\"male\\"}){id,age}}"',
-    )
-  })
 
-  it("find", () => {
-    const query = useGraphql<User>({
-      operation: "query",
-      params: {
-        action: {
-          type: "findUser",
-          input: "find-user-input",
-        },
-        fields: ["id", "age"],
-        args: { id: 2 },
-      },
-    })
-    expect(query).toMatchInlineSnapshot(
-      '"query{findUser(findUserInput:{id:2}){id,age}}"',
-    )
-  })
-
-  it("findAll", () => {
-    const query = useGraphql<User>({
-      operation: "query",
-      params: {
-        action: {
-          type: "findUsers",
-          input: "findUsersInput",
-        },
-        fields: ["id", "age"],
-        args: {},
-      },
-    })
-    expect(query).toMatchInlineSnapshot('"query{findUsers{id,age}}"')
-  })
-
-  it("update", () => {
-    const query = useGraphql<User>({
-      operation: "mutation",
-      params: {
-        action: {
-          type: "update-user",
-          input: "update-user-input",
-        },
-        fields: ["id", "age"],
-        args: { id: 2, name: "modified-username" },
-      },
-    })
-    expect(query).toMatchInlineSnapshot(
-      '"mutation{updateUser(updateUserInput:{id:2,name:\\"modified-username\\"}){id,age}}"',
-    )
-  })
-
-  it("remove", () => {
-    const query = useGraphql<User>({
-      operation: "mutation",
-      params: {
-        action: {
-          type: "remove-user",
-          input: "remove-user-input",
-        },
-        fields: ["id", "age"],
-        args: { id: 2 },
-      },
-    })
-    expect(query).toMatchInlineSnapshot(
-      '"mutation{removeUser(removeUserInput:{id:2}){id,age}}"',
-    )
-  })
-
-  it("multiple actions", () => {
-    const query = useGraphql<[Article, User]>({
-      operation: "query",
-      params: [
-        {
-          action: {
-            type: "article",
-          },
-          fields: ["id", "title", "content"],
-        },
-        {
-          action: {
-            type: "user",
-          },
-          fields: ["id", "name"],
-        },
-      ],
-    })
-
-    expect(query).toMatchInlineSnapshot(
-      '"query{article{id,title,content}user{id,name}}"',
-    )
-
-    const mutation = useGraphql<[User, Article]>({
-      operation: "mutation",
-      params: [
-        {
-          action: {
-            type: "user",
-            input: "create-user",
-          },
-          fields: ["id", "name"],
-          args: { name: "newName" },
-        },
-        {
-          action: {
-            type: "article",
-            input: "create-article",
-          },
-          fields: ["id", "title", "content"],
-          args: {
-            title: "newTitle",
-          },
-        },
-      ],
-    })
-
-    expect(mutation).toMatchInlineSnapshot(
-      '"mutation{user(createUser:{name:\\"newName\\"}){id,name}article(createArticle:{title:\\"newTitle\\"}){id,title,content}}"',
+    expect(r1).toMatchInlineSnapshot('"(ultra:\\"x\\",human:\\"daichi\\")"')
+    expect(r2).toMatchInlineSnapshot(
+      '"(ultra:\\"zett\\",type:{name:\\"alpha\\",medals:{one:\\"zero\\",two:\\"seven\\",three:\\"leo\\"}})"',
     )
   })
 })

@@ -1,12 +1,6 @@
-export const capitalize = (str: string) =>
-  str[0].toUpperCase() + str.substring(1)
+import { BaseObject } from "./types"
 
-export const uncapitalize = (str: string) =>
-  str[0].toLowerCase() + str.substring(1)
+export const isEmptyObj = (obj: BaseObject) => Object.keys(obj).length === 0
 
-export const kebab2Camel = (str: string) =>
-  str
-    .split("-")
-    .filter(Boolean)
-    .map((s, i) => (i !== 0 ? capitalize(s.trim()) : uncapitalize(s.trim())))
-    .join("")
+export const removeInitial = (str: string, initial: string) =>
+  str[0] === initial ? str.substring(1) : str
