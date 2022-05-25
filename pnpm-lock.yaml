@@ -4,26 +4,26 @@ specifiers:
   '@types/node': ^17.0.35
   bumpp: ^7.1.1
   husky: ^8.0.1
-  lint-staged: ^12.4.1
+  lint-staged: ^12.4.2
   pnpm: ^7.1.5
   prettier: ^2.6.2
   rimraf: ^3.0.2
-  typescript: ^4.6.4
+  typescript: ^4.7.2
   unbuild: ^0.7.4
-  unplugin-auto-import: ^0.8.2
+  unplugin-auto-import: ^0.8.4
   vitest: ^0.12.9
 
 devDependencies:
   '@types/node': 17.0.35
   bumpp: 7.1.1
   husky: 8.0.1
-  lint-staged: 12.4.1
+  lint-staged: 12.4.2
   pnpm: 7.1.5
   prettier: 2.6.2
   rimraf: 3.0.2
-  typescript: 4.6.4
+  typescript: 4.7.2
   unbuild: 0.7.4
-  unplugin-auto-import: 0.8.2
+  unplugin-auto-import: 0.8.4
   vitest: 0.12.9
 
 packages:
@@ -1430,8 +1430,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /lint-staged/12.4.1:
-    resolution: {integrity: sha512-PTXgzpflrQ+pODQTG116QNB+Q6uUTDg5B5HqGvNhoQSGt8Qy+MA/6zSnR8n38+sxP5TapzeQGTvoKni0KRS8Vg==}
+  /lint-staged/12.4.2:
+    resolution: {integrity: sha512-JAJGIzY/OioIUtrRePr8go6qUxij//mL+RGGoFKU3VWQRtIHgWoHizSqH0QVn2OwrbXS9Q6CICQjfj+E5qvrXg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -1558,7 +1558,7 @@ packages:
     hasBin: true
     dev: true
 
-  /mkdist/0.3.10_typescript@4.6.4:
+  /mkdist/0.3.10_typescript@4.7.2:
     resolution: {integrity: sha512-Aoc6hjILr2JPUJU2OUvBiD5sZ/CG1FeiXwk6KKPqE0iSTjBCrjrVK/fP5ig+TB3AKHvh2aA2QXXGeXVCJBdSwg==}
     hasBin: true
     peerDependencies:
@@ -1574,7 +1574,7 @@ packages:
       jiti: 1.13.0
       mri: 1.2.0
       pathe: 0.2.0
-      typescript: 4.6.4
+      typescript: 4.7.2
     dev: true
 
   /mlly/0.3.19:
@@ -1775,7 +1775,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /rollup-plugin-dts/4.2.1_ucrswzumipog3rfswkcvuves4u:
+  /rollup-plugin-dts/4.2.1_b6rofaxcvchkdy34i2i4viwnme:
     resolution: {integrity: sha512-eaxQZNUJ5iQcxNGlpJ1CUgG4OSVqWjDZ3nNSWBIoGrpcote2aNphSe1RJOaSYkb8dwn3o+rYm1vvld/5z3EGSQ==}
     engines: {node: '>=v12.22.11'}
     peerDependencies:
@@ -1784,7 +1784,7 @@ packages:
     dependencies:
       magic-string: 0.26.1
       rollup: 2.71.1
-      typescript: 4.6.4
+      typescript: 4.7.2
     optionalDependencies:
       '@babel/code-frame': 7.16.7
     dev: true
@@ -2014,8 +2014,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /typescript/4.6.4:
-    resolution: {integrity: sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==}
+  /typescript/4.7.2:
+    resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
@@ -2043,7 +2043,7 @@ packages:
       jiti: 1.13.0
       magic-string: 0.26.1
       mkdirp: 1.0.4
-      mkdist: 0.3.10_typescript@4.6.4
+      mkdist: 0.3.10_typescript@4.7.2
       mlly: 0.5.2
       mri: 1.2.0
       pathe: 0.2.0
@@ -2051,10 +2051,10 @@ packages:
       pretty-bytes: 6.0.0
       rimraf: 3.0.2
       rollup: 2.71.1
-      rollup-plugin-dts: 4.2.1_ucrswzumipog3rfswkcvuves4u
+      rollup-plugin-dts: 4.2.1_b6rofaxcvchkdy34i2i4viwnme
       rollup-plugin-esbuild: 4.9.1_lq7i7lniz7dbjsssi7edpdfmuu
       scule: 0.2.1
-      typescript: 4.6.4
+      typescript: 4.7.2
       untyped: 0.4.4
     transitivePeerDependencies:
       - supports-color
@@ -2084,8 +2084,8 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unplugin-auto-import/0.8.2:
-    resolution: {integrity: sha512-iZjJ+3HEU3dn79SDDfgU0uVP6fGjufP4SnpU26pRVvTSLvh/en5YgTS8tNI06zWIwGhjYPruprtlbwV8SEQs8Q==}
+  /unplugin-auto-import/0.8.4:
+    resolution: {integrity: sha512-YtUN80CzPBLK6qrzONQ0WWg191A0MMERq1nxcVSH+kUkKbs7L2QFiRv9eZrk3Rf9oe7hk0gLfYH85b1bPUG2yA==}
     engines: {node: '>=14'}
     peerDependencies:
       '@vueuse/core': '*'
