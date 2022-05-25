@@ -1,5 +1,5 @@
 import { kebab2Camel } from "./helper"
-import { GqlQuery, GqlMutation, GqlFields } from "./types"
+import { GqlQuery, GqlMutation, GqlFields, BaseObject } from "./types"
 
 export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
   const { operation, params } = options
@@ -24,7 +24,7 @@ export const useGraphql = <T>(options: GqlQuery<T> | GqlMutation<T>) => {
 export const createActionString = (
   action: { type: string; input?: string },
   fields: GqlFields,
-  args?: Record<string, any>,
+  args?: BaseObject,
 ) => {
   const { type: actionType, input: actionInput } = action
 
@@ -55,21 +55,18 @@ export const createFieldsString = (fields: GqlFields) => {
   return ret === "" ? ret : ret.substring(1)
 }
 
-export const createArgsString = (
-  args: Record<string, unknown>,
-  actionInput: string,
-) => {
+export const createArgsString = (args: BaseObject, actionInput: string) => {
   const argsString = gqlStringify(args, "")
   return `(${actionInput}:{${argsString}})`
 }
 
-export const gqlStringify = (args: Record<string, unknown>, s = "") => {
+export const gqlStringify = (args: BaseObject, s = "") => {
   for (const key in args) {
     const value = args[key]
 
     if (typeof value === "object" && value !== null) {
       if (Object.keys(value).length === 0) s += `,${key}:{}`
-      else s += `,${key}:{${gqlStringify(value as Record<string, unknown>)}}`
+      else s += `,${key}:{${gqlStringify(value as BaseObject)}}`
     } else if (typeof value === "string") {
       s += `,${key}:"${value}"`
     } else {

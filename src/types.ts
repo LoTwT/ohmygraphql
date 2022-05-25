@@ -1,6 +1,6 @@
-export type GqlFields<T = {}> =
-  | (keyof T & string)[]
-  | (string | Record<string, unknown>)[]
+export type BaseObject = Record<string, unknown>
+
+export type GqlFields<T = {}> = (keyof T & string)[] | (string | BaseObject)[]
 
 export type GqlActionOptions = {
   type: string
