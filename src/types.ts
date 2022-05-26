@@ -1,13 +1,8 @@
 export type BaseObject = Record<string, unknown>
 
-export type GqlQuery = {
-  operation: "query"
+export type GqlParams = {
+  operation: "query" | "mutation"
   scope: GqlScope
-}
-
-export type GqlMutation = {
-  operation: "mutation"
-  scope: Required<GqlScope>
 }
 
 export type GqlScope = {

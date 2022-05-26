@@ -1,14 +1,8 @@
 import { removeInitial, isEmptyObj } from "./helper"
-import {
-  BaseObject,
-  GqlMutation,
-  GqlQuery,
-  GqlScope,
-  GqlScopeBody,
-} from "./types"
-import { ref, ReactiveEffect } from "@vue/reactivity"
+import { BaseObject, GqlParams, GqlScope, GqlScopeBody } from "./types"
+import { ref, ReactiveEffect, isRef, Ref } from "@vue/reactivity"
 
-export const useGraphql = (options: GqlQuery | GqlMutation) => {
+export const useGraphql = (options: GqlParams) => {
   const { operation, scope } = options
   return `${operation}{${serializeScope(scope)}}`
 }
@@ -58,8 +52,8 @@ export const serializeBody = (fields: GqlScopeBody) => {
   return `{${removeInitial(ret, ",")}}`
 }
 
-export const useReactiveGraphql = (options: GqlQuery | GqlMutation) => {
-  const optionsRef = ref(options)
+export const useReactiveGraphql = (options: GqlParams | Ref<GqlParams>) => {
+  const optionsRef = isRef(options) ? options : ref(options)
   const query = ref("")
 
   const watcher = new ReactiveEffect(() => {

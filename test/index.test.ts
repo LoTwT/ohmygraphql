@@ -1,9 +1,11 @@
+import { ref } from "@vue/reactivity"
 import {
   serializeBody,
   serializeArgs,
   useGraphql,
   useReactiveGraphql,
 } from "../src/graphql"
+import { GqlParams } from "../src/types"
 
 describe("useGraphql", () => {
   it("useGraphql", () => {
@@ -74,6 +76,55 @@ describe("useGraphql", () => {
 
     stop()
     options.value.operation = "query"
+    expect(query.value).toMatchInlineSnapshot(
+      '"mutation{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    run()
+    expect(query.value).toMatchInlineSnapshot(
+      '"query{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+  })
+
+  it("useReactiveGraphql ref", () => {
+    const rawOptionsRef = ref<GqlParams>({
+      operation: "query",
+      scope: {
+        name: "repository",
+        args: { owner: "developer-plus", name: "interview" },
+        body: [
+          {
+            name: "pinnedIssues",
+            args: { last: 3 },
+            body: [
+              {
+                name: "nodes",
+                body: [
+                  {
+                    name: "issue",
+                    body: [{ name: "author", body: ["login"] }, "title", "url"],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    })
+
+    const { query, stop, run } = useReactiveGraphql(rawOptionsRef)
+
+    expect(query.value).toMatchInlineSnapshot(
+      '"query{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    rawOptionsRef.value.operation = "mutation"
+    expect(query.value).toMatchInlineSnapshot(
+      '"mutation{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    stop()
+    rawOptionsRef.value.operation = "query"
     expect(query.value).toMatchInlineSnapshot(
       '"mutation{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
     )
