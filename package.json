@@ -1,6 +1,6 @@
 {
   "name": "ohmygraphql",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "packageManager": "pnpm@7.1.5",
   "description": "a customize hook to generate graphql string for clien in Javascript.",
   "main": "./dist/index.cjs",
