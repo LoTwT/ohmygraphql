@@ -1,1 +1,1 @@
-export * from "./graphql"
+export { useGraphql, useReactiveGraphql } from "./graphql"
