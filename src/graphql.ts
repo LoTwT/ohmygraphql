@@ -6,6 +6,7 @@ import {
   GqlScope,
   GqlScopeBody,
 } from "./types"
+import { ref, ReactiveEffect } from "@vue/reactivity"
 
 export const useGraphql = (options: GqlQuery | GqlMutation) => {
   const { operation, scope } = options
@@ -55,4 +56,22 @@ export const serializeBody = (fields: GqlScopeBody) => {
   }
 
   return `{${removeInitial(ret, ",")}}`
+}
+
+export const useReactiveGraphql = (options: GqlQuery | GqlMutation) => {
+  const optionsRef = ref(options)
+  const query = ref("")
+
+  const watcher = new ReactiveEffect(() => {
+    query.value = useGraphql(optionsRef.value)
+  })
+
+  watcher.run()
+
+  return {
+    query: query,
+    options: optionsRef,
+    stop: () => watcher.stop(),
+    run: () => watcher.run(),
+  }
 }

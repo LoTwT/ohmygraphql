@@ -1,4 +1,9 @@
-import { serializeBody, serializeArgs, useGraphql } from "../src/graphql"
+import {
+  serializeBody,
+  serializeArgs,
+  useGraphql,
+  useReactiveGraphql,
+} from "../src/graphql"
 
 describe("useGraphql", () => {
   it("useGraphql", () => {
@@ -29,6 +34,53 @@ describe("useGraphql", () => {
 
     expect(query).toBe(
       `query{repository(owner:"developer-plus",name:"interview"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}`,
+    )
+  })
+
+  it("useReactiveGraphql", () => {
+    const { query, options, stop, run } = useReactiveGraphql({
+      operation: "query",
+      scope: {
+        name: "repository",
+        args: { owner: "developer-plus", name: "interview" },
+        body: [
+          {
+            name: "pinnedIssues",
+            args: { last: 3 },
+            body: [
+              {
+                name: "nodes",
+                body: [
+                  {
+                    name: "issue",
+                    body: [{ name: "author", body: ["login"] }, "title", "url"],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    })
+
+    expect(query.value).toMatchInlineSnapshot(
+      '"query{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    options.value.operation = "mutation"
+    expect(query.value).toMatchInlineSnapshot(
+      '"mutation{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    stop()
+    options.value.operation = "query"
+    expect(query.value).toMatchInlineSnapshot(
+      '"mutation{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
+    )
+
+    run()
+    expect(query.value).toMatchInlineSnapshot(
+      '"query{repository(owner:\\"developer-plus\\",name:\\"interview\\"){pinnedIssues(last:3){nodes{issue{author{login},title,url}}}}}"',
     )
   })
 
